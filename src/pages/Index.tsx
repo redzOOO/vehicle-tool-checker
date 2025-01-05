@@ -3,13 +3,23 @@ import { RegistrationInput } from "@/components/RegistrationInput";
 import { VehicleDetails } from "@/components/VehicleDetails";
 import { ContactForm, ContactFormData } from "@/components/ContactForm";
 import { toast } from "sonner";
+import { getDvlaApiKey, setDvlaApiKey } from "@/utils/apiKeys";
 
-// Mock function to simulate API call - replace with actual API integration
 const checkVehicleCompatibility = async (registration: string) => {
+  const apiKey = getDvlaApiKey();
+  
+  if (!apiKey) {
+    // For demo purposes, set the API key if not present
+    // In production, you would want to handle this differently
+    setDvlaApiKey('');
+    toast.error("Please configure DVLA API key in settings");
+    throw new Error("DVLA API key not configured");
+  }
+
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1000));
   
-  // Mock response - replace with actual API call
+  // Mock response - replace with actual DVLA API call
   return {
     isCompatible: registration.startsWith("A"),
     vehicle: {
