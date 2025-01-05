@@ -28,11 +28,12 @@ export const RegistrationInput = ({ onSubmit, isLoading }: RegistrationInputProp
         </label>
         <Input
           id="registration"
-          placeholder="e.g., AB12 CDE"
+          placeholder="AB12 CDE"
           value={registration}
           onChange={(e) => setRegistration(e.target.value)}
-          className="uppercase text-center text-lg"
+          className="uppercase text-center text-lg font-bold tracking-wider h-12 bg-[#FEF7CD] border-2 border-black text-[#1A1F2C]"
           maxLength={8}
+          style={{ fontFamily: "'Charles Wright', Arial, sans-serif" }}
         />
       </div>
       <Button type="submit" disabled={isLoading} className="w-full">
