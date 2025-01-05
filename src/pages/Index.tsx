@@ -107,7 +107,7 @@ const Index = () => {
       
       <footer className="bg-primary text-white py-8 mt-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold text-lg mb-3">Contact Us</h3>
               <p className="text-sm">
@@ -122,14 +122,6 @@ const Index = () => {
                 Covering all of North Wales including:<br />
                 Wrexham • Rhyl • Llandudno<br />
                 Bangor • Colwyn Bay • Prestatyn
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-3">Certifications</h3>
-              <p className="text-sm">
-                • Fully Licensed & Insured<br />
-                • DBS Checked<br />
-                • Member of the MLA
               </p>
             </div>
           </div>
