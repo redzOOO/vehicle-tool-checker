@@ -31,7 +31,7 @@ export const RegistrationInput = ({ onSubmit, isLoading }: RegistrationInputProp
           placeholder="AB12 CDE"
           value={registration}
           onChange={(e) => setRegistration(e.target.value)}
-          className="uppercase text-center text-lg font-bold tracking-wider h-12 bg-[#FEF7CD] border-2 border-black text-[#1A1F2C]"
+          className="uppercase text-center text-lg font-bold tracking-wider h-12 bg-[#FFEB3B] border-2 border-black text-[#1A1F2C]"
           maxLength={8}
           style={{ fontFamily: "'Charles Wright', Arial, sans-serif" }}
         />

@@ -82,7 +82,7 @@ const Index = () => {
           {isCompatible && vehicle && (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold text-center">
-                Great news! Your vehicle is compatible
+                We can offer assistance!
               </h2>
               <p className="text-center text-gray-600">
                 Please provide your details below and we'll get back to you shortly
