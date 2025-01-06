@@ -16,12 +16,13 @@ const checkVehicleCompatibility = async (registration: string) => {
     
     if (error) {
       console.error('Error fetching DVLA API key:', error);
-      throw new Error("Failed to access DVLA API key");
+      toast.error("Failed to access DVLA API key");
+      return null;
     }
 
     if (!data) {
       toast.error("DVLA API key not configured. Please contact support.");
-      throw new Error("DVLA API key not found");
+      return null;
     }
 
     const apiKey = data.value;
@@ -41,7 +42,8 @@ const checkVehicleCompatibility = async (registration: string) => {
     };
   } catch (error) {
     console.error('Error in checkVehicleCompatibility:', error);
-    throw error;
+    toast.error("An unexpected error occurred while checking vehicle compatibility");
+    return null;
   }
 };
 
@@ -54,14 +56,13 @@ const Index = () => {
     setIsLoading(true);
     try {
       const result = await checkVehicleCompatibility(registration);
-      setVehicle(result.vehicle);
-      setIsCompatible(result.isCompatible);
-      if (!result.isCompatible) {
-        toast.error("Sorry, this vehicle is not compatible with our tools");
+      if (result) {
+        setVehicle(result.vehicle);
+        setIsCompatible(result.isCompatible);
+        if (!result.isCompatible) {
+          toast.error("Sorry, this vehicle is not compatible with our tools");
+        }
       }
-    } catch (error) {
-      toast.error("Error checking vehicle compatibility");
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
