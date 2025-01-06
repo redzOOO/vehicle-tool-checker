@@ -6,31 +6,42 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 const checkVehicleCompatibility = async (registration: string) => {
-  // Fetch the API key from Supabase config
-  const { data: { value: apiKey }, error } = await supabase
-    .from('secrets')
-    .select('value')
-    .eq('name', 'DVLA_API_KEY')
-    .single();
-  
-  if (error || !apiKey) {
-    toast.error("Error accessing DVLA API key");
-    throw new Error("DVLA API key not configured");
-  }
+  try {
+    // Fetch the API key from Supabase secrets table
+    const { data, error } = await supabase
+      .from('secrets')
+      .select('value')
+      .eq('name', 'DVLA_API_KEY')
+      .single();
+    
+    if (error) {
+      console.error('Error fetching DVLA API key:', error);
+      throw new Error("Failed to access DVLA API key");
+    }
 
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  
-  // Mock response - replace with actual DVLA API call
-  return {
-    isCompatible: registration.startsWith("A"),
-    vehicle: {
-      make: "Toyota",
-      model: "Corolla",
-      year: "2020",
-      registration: registration,
-    },
-  };
+    if (!data?.value) {
+      throw new Error("DVLA API key not found");
+    }
+
+    const apiKey = data.value;
+    
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+    // Mock response - replace with actual DVLA API call
+    return {
+      isCompatible: registration.startsWith("A"),
+      vehicle: {
+        make: "Toyota",
+        model: "Corolla",
+        year: "2020",
+        registration: registration,
+      },
+    };
+  } catch (error) {
+    console.error('Error in checkVehicleCompatibility:', error);
+    throw error;
+  }
 };
 
 const Index = () => {
