@@ -12,14 +12,15 @@ const checkVehicleCompatibility = async (registration: string) => {
       .from('secrets')
       .select('value')
       .eq('name', 'DVLA_API_KEY')
-      .single();
+      .maybeSingle();
     
     if (error) {
       console.error('Error fetching DVLA API key:', error);
       throw new Error("Failed to access DVLA API key");
     }
 
-    if (!data?.value) {
+    if (!data) {
+      toast.error("DVLA API key not configured. Please contact support.");
       throw new Error("DVLA API key not found");
     }
 
