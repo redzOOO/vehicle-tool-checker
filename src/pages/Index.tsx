@@ -3,16 +3,18 @@ import { RegistrationInput } from "@/components/RegistrationInput";
 import { VehicleDetails } from "@/components/VehicleDetails";
 import { ContactForm, ContactFormData } from "@/components/ContactForm";
 import { toast } from "sonner";
-import { getDvlaApiKey, setDvlaApiKey } from "@/utils/apiKeys";
+import { supabase } from "@/integrations/supabase/client";
 
 const checkVehicleCompatibility = async (registration: string) => {
-  const apiKey = getDvlaApiKey();
+  // Fetch the API key from Supabase config
+  const { data: { value: apiKey }, error } = await supabase
+    .from('secrets')
+    .select('value')
+    .eq('name', 'DVLA_API_KEY')
+    .single();
   
-  if (!apiKey) {
-    // For demo purposes, set the API key if not present
-    // In production, you would want to handle this differently
-    setDvlaApiKey('');
-    toast.error("Please configure DVLA API key in settings");
+  if (error || !apiKey) {
+    toast.error("Error accessing DVLA API key");
     throw new Error("DVLA API key not configured");
   }
 
