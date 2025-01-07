@@ -30,24 +30,34 @@ const checkVehicleCompatibility = async (registration: string) => {
     }
 
     if (!data) {
+      console.log('No DVLA API key found');
       toast.error("DVLA API key not configured. Please contact support.");
       return null;
     }
 
     const apiKey = data.value;
+    console.log('Successfully retrieved DVLA API key');
     
-    // Simulate API delay
+    // For development/testing, we'll use a mock response
+    // In production, this would be replaced with the actual DVLA API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
     
-    // Mock response - replace with actual DVLA API call
+    // Mock vehicle data based on registration
+    const mockVehicle = {
+      make: "Toyota",
+      model: "Corolla",
+      year: "2020",
+      registration: registration,
+    };
+
+    // Mock compatibility check (for testing purposes)
+    const isCompatible = true;
+
+    console.log('Vehicle check completed:', { isCompatible, vehicle: mockVehicle });
+    
     return {
-      isCompatible: registration.startsWith("A"),
-      vehicle: {
-        make: "Toyota",
-        model: "Corolla",
-        year: "2020",
-        registration: registration,
-      },
+      isCompatible,
+      vehicle: mockVehicle,
     };
   } catch (error) {
     console.error('Error in checkVehicleCompatibility:', error);
