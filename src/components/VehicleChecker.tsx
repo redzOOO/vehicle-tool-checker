@@ -39,7 +39,7 @@ const checkVehicleCompatibility = async (registration: string) => {
     console.log('Successfully retrieved DVLA API key');
     
     try {
-      const apiUrl = 'https://northwalesautounlock.co.uk/api/vehicle-check';
+      const apiUrl = '/api/vehicle-check';  // Using relative path
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
