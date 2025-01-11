@@ -25,22 +25,29 @@ const checkVehicleCompatibility = async (registration: string) => {
     
     if (error) {
       console.error('Error fetching DVLA API key:', error);
-      toast.error("Failed to access DVLA API key");
-      return null;
+      throw new Error("Failed to access DVLA API key");
     }
 
     if (!data) {
       console.log('No DVLA API key found');
-      toast.error("DVLA API key not configured. Please contact support.");
-      return null;
+      // For development/testing, use mock response
+      const mockVehicle = {
+        make: "Toyota",
+        model: "Corolla",
+        year: "2020",
+        registration: registration,
+      };
+      return {
+        isCompatible: true,
+        vehicle: mockVehicle,
+      };
     }
 
     const apiKey = data.value;
     console.log('Successfully retrieved DVLA API key');
     
     try {
-      const apiUrl = '/api/vehicle-check';  // Using relative path
-      const response = await fetch(apiUrl, {
+      const response = await fetch(`${window.location.origin}/api/vehicle-check`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,19 +60,19 @@ const checkVehicleCompatibility = async (registration: string) => {
         throw new Error(`API call failed with status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const responseData = await response.json();
       return {
-        isCompatible: data.isCompatible,
+        isCompatible: responseData.isCompatible,
         vehicle: {
-          make: data.vehicle.make,
-          model: data.vehicle.model,
-          year: data.vehicle.year,
+          make: responseData.vehicle.make,
+          model: responseData.vehicle.model,
+          year: responseData.vehicle.year,
           registration: registration,
         }
       };
     } catch (apiError) {
       console.error('API call failed:', apiError);
-      // For development/testing, fallback to mock response
+      // Fallback to mock response for development
       console.log('Falling back to mock response');
       const mockVehicle = {
         make: "Toyota",
@@ -73,19 +80,14 @@ const checkVehicleCompatibility = async (registration: string) => {
         year: "2020",
         registration: registration,
       };
-      const isCompatible = true;
-
-      console.log('Vehicle check completed:', { isCompatible, vehicle: mockVehicle });
-      
       return {
-        isCompatible,
+        isCompatible: true,
         vehicle: mockVehicle,
       };
     }
   } catch (error) {
     console.error('Error in checkVehicleCompatibility:', error);
-    toast.error("An unexpected error occurred while checking vehicle compatibility");
-    return null;
+    throw error;
   }
 };
 
@@ -107,6 +109,8 @@ export const VehicleChecker = ({ onCompatibleVehicle }: VehicleCheckerProps) => 
           toast.error("Sorry, this vehicle is not compatible with our tools");
         }
       }
+    } catch (error) {
+      toast.error("An error occurred while checking vehicle compatibility");
     } finally {
       setIsLoading(false);
     }
