@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { EmailData } from "./types.ts";
 import { generateEmailTemplate } from "./emailTemplate.ts";
+import { EmailData } from "./types.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
@@ -17,36 +17,15 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const formData: EmailData = await req.json();
     console.log('Received form data:', formData);
-    
-    const emailHtml = generateEmailTemplate(formData);
-    console.log('Generated email HTML:', emailHtml);
 
-    if (!RESEND_API_KEY) {
-      throw new Error('RESEND_API_KEY is not configured');
-    }
-
-    const plainText = `
-      New contact form submission
-      Name: ${formData.name}
-      Location: ${formData.location}
-      Phone: ${formData.phone}
-      Urgency: ${formData.urgency.toUpperCase()}
-      ${formData.notes ? `Notes: ${formData.notes}` : ''}
-      ${formData.vehicle ? `
-        Vehicle Details:
-        Make: ${formData.vehicle.make}
-        Year: ${formData.vehicle.year}
-        ${formData.vehicle.registration ? `Registration: ${formData.vehicle.registration}` : ''}
-        ${formData.vehicle.colour ? `Colour: ${formData.vehicle.colour}` : ''}
-      ` : ''}
-    `.trim();
+    const htmlContent = generateEmailTemplate(formData);
+    console.log('Generated HTML template:', htmlContent);
 
     const emailData = {
-      from: "Auto Unlock Services <contact@northwalesautounlock.co.uk>",
+      from: "North Wales Auto Unlock <contact@northwalesautounlock.co.uk>",
       to: ["lee.redhead@outlook.com"],
       subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
-      html: emailHtml,
-      text: plainText
+      html: htmlContent,
     };
 
     console.log('Sending email with data:', emailData);
@@ -68,7 +47,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const data = await res.json();
     console.log('Email sent successfully:', data);
-    
+
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,

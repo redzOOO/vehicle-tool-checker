@@ -5,15 +5,11 @@ export interface Vehicle {
   colour?: string;
 }
 
-export interface ContactFormData {
+export interface EmailData {
   name: string;
   location: string;
   phone: string;
   notes: string;
   urgency: string;
-  vehicle?: Vehicle;
-}
-
-export interface EmailData extends ContactFormData {
   vehicle?: Vehicle;
 }

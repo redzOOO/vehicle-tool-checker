@@ -11,10 +11,6 @@ export const generateVehicleSection = (vehicle?: EmailData['vehicle']) => {
       <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Vehicle Details</h3>
       <table style="width: 100%; border-collapse: collapse;">
         <tr>
-          <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Registration:</strong></td>
-          <td style="padding: 8px; border: 1px solid #e5e7eb;">${vehicle.registration || 'Not provided'}</td>
-        </tr>
-        <tr>
           <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Make:</strong></td>
           <td style="padding: 8px; border: 1px solid #e5e7eb;">${vehicle.make}</td>
         </tr>
@@ -22,22 +18,15 @@ export const generateVehicleSection = (vehicle?: EmailData['vehicle']) => {
           <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Year:</strong></td>
           <td style="padding: 8px; border: 1px solid #e5e7eb;">${vehicle.year}</td>
         </tr>
-        ${vehicle.colour ? `
-        <tr>
-          <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Colour:</strong></td>
-          <td style="padding: 8px; border: 1px solid #e5e7eb;">${vehicle.colour}</td>
-        </tr>
-        ` : ''}
       </table>
-    </div>
-    <div style="margin-bottom: 24px;">
-      <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Tool Compatibility</h3>
-      <p><strong>Compatible Tools:</strong> ${toolCompatibility.compatibleTools.join(', ') || 'None'}</p>
+      <div style="margin-top: 12px;">
+        <p><strong>Compatible Tools:</strong> ${toolCompatibility.compatibleTools.join(', ') || 'None'}</p>
+      </div>
     </div>
   `;
 };
 
-export const generateEmailTemplate = (data: EmailData) => {
+export const generateEmailTemplate = (data: EmailData): string => {
   const template = `
     <!DOCTYPE html>
     <html>
