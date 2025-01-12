@@ -22,9 +22,11 @@ export const findMatchingMake = (make: string, makes: string[]): string | undefi
   if (exactMatch) return exactMatch;
 
   // Then try generic match (e.g., "Toyota" for "Toyota Corolla")
+  const makeWords = make.toLowerCase().split(' ');
   return makes.find(key => {
-    const makeWords = make.toLowerCase().split(' ');
     const keyWords = key.toLowerCase().split(' ');
-    return makeWords.some(word => keyWords.includes(word));
+    // Check if any word in the make matches any word in the key
+    return makeWords.some(word => keyWords.includes(word)) ||
+           keyWords.some(word => makeWords.includes(word));
   });
 };

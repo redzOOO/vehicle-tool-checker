@@ -20,7 +20,7 @@ export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) =
     <Card className="p-6 w-full max-w-md mx-auto animate-fadeIn">
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-semibold">Vehicle Details</h3>
+          <h3 className="text-lg font-semibold">Compatibility with our Auto Unlocking Services</h3>
           <span
             className={`px-3 py-1 rounded-full text-sm ${
               toolCompatibility.isCompatible
