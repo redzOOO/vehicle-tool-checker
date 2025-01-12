@@ -9,6 +9,8 @@ interface ContactSectionProps {
   vehicle?: {
     make: string;
     year: string;
+    registration?: string;
+    colour?: string;
   };
 }
 
@@ -33,6 +35,7 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
         phone: formData.phone,
         notes: formData.notes,
         urgency: formData.urgency,
+        vehicle: vehicle // Include vehicle information if available
       };
       
       console.log('Sending email data:', emailData);
