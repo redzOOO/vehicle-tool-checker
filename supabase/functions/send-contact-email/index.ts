@@ -11,6 +11,7 @@ const corsHeaders = {
 interface ContactFormData {
   name: string;
   location: string;
+  phone: string;
   notes: string;
   urgency: string;
 }
@@ -29,11 +30,16 @@ const handler = async (req: Request): Promise<Response> => {
       <h2>New Contact Form Submission</h2>
       <p><strong>Name:</strong> ${formData.name}</p>
       <p><strong>Location:</strong> ${formData.location}</p>
+      <p><strong>Phone:</strong> ${formData.phone}</p>
       <p><strong>Urgency:</strong> ${formData.urgency}</p>
       ${formData.notes ? `<p><strong>Additional Notes:</strong> ${formData.notes}</p>` : ''}
     `;
 
     console.log('Sending email with HTML:', emailHtml);
+
+    if (!RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",

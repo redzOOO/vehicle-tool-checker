@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ContactForm, ContactFormData } from "@/components/ContactForm";
+import { ContactForm } from "@/components/ContactForm";
+import { ContactFormData } from "@/types/contact";
 import { toast } from "sonner";
 import { checkToolCompatibility } from "@/utils/lockTools";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,13 +26,16 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
         console.log('Compatible Tools:', toolCompatibility.compatibleTools);
       }
       
-      // Prepare form data without file objects
+      // Prepare form data
       const emailData = {
         name: formData.name,
         location: formData.location,
+        phone: formData.phone,
         notes: formData.notes,
         urgency: formData.urgency,
       };
+      
+      console.log('Sending email data:', emailData);
       
       // Send email using Edge Function
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
