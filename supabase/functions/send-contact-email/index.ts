@@ -18,13 +18,12 @@ interface ContactFormData {
   vehicle?: {
     make: string;
     year: string;
-    registration: string;
-    colour: string;
+    registration?: string;
+    colour?: string;
   };
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -33,64 +32,80 @@ const handler = async (req: Request): Promise<Response> => {
     const formData: ContactFormData = await req.json();
     console.log('Received form data:', formData);
     
-    // Get tool compatibility if vehicle info is available
     let toolCompatibilityInfo = '';
+    let vehicleInfo = '';
+    
     if (formData.vehicle) {
       const toolCompatibility = checkToolCompatibility(formData.vehicle.make, formData.vehicle.year);
-      toolCompatibilityInfo = `
-        <h3 style="color: #333; margin-top: 20px;">Vehicle Information</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Registration:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.vehicle.registration}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Make:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.vehicle.make}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Year:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.vehicle.year}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Colour:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.vehicle.colour}</td>
-          </tr>
-        </table>
-        <h3 style="color: #333;">Tool Compatibility</h3>
-        <p><strong>Compatible Tools:</strong> ${toolCompatibility.compatibleTools.join(', ') || 'None'}</p>
+      
+      vehicleInfo = `
+        <div style="margin-top: 24px; margin-bottom: 24px;">
+          <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Vehicle Details</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Registration:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.vehicle.registration || 'Not provided'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Make:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.vehicle.make}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Year:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.vehicle.year}</td>
+            </tr>
+            ${formData.vehicle.colour ? `
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Colour:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.vehicle.colour}</td>
+            </tr>
+            ` : ''}
+          </table>
+        </div>
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Tool Compatibility</h3>
+          <p><strong>Compatible Tools:</strong> ${toolCompatibility.compatibleTools.join(', ') || 'None'}</p>
+        </div>
       `;
     }
     
     const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #1a1f2c; border-bottom: 2px solid #1a1f2c; padding-bottom: 10px;">New Contact Form Submission</h2>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+        <div style="background-color: #f3f4f6; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+          <h2 style="color: #1a1f2c; margin: 0 0 16px 0; font-size: 24px;">New Contact Form Submission</h2>
+          <p style="color: #4b5563; margin: 0;">A new contact form has been submitted with the following details:</p>
+        </div>
         
-        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Name:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.name}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Location:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.location}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Phone:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd;">${formData.phone}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #ddd;"><strong>Urgency:</strong></td>
-            <td style="padding: 8px; border: 1px solid #ddd; ${formData.urgency === 'urgent' ? 'color: #dc2626;' : ''}">${formData.urgency}</td>
-          </tr>
-        </table>
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Contact Details</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Name:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Location:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.location}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Phone:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;">${formData.phone}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Urgency:</strong></td>
+              <td style="padding: 8px; border: 1px solid #e5e7eb; ${formData.urgency === 'urgent' ? 'color: #dc2626; font-weight: bold;' : ''}">${formData.urgency.toUpperCase()}</td>
+            </tr>
+          </table>
+        </div>
 
         ${formData.notes ? `
-          <h3 style="color: #333;">Additional Notes</h3>
-          <p style="background: #f9fafb; padding: 12px; border-radius: 4px; margin: 10px 0;">${formData.notes}</p>
+          <div style="margin-bottom: 24px;">
+            <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Additional Notes</h3>
+            <p style="background-color: #f9fafb; padding: 12px; border-radius: 4px; margin: 0;">${formData.notes}</p>
+          </div>
         ` : ''}
         
-        ${toolCompatibilityInfo}
+        ${vehicleInfo}
       </div>
     `;
 
