@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ContactForm, ContactFormData } from "@/components/ContactForm";
 import { toast } from "sonner";
 import { checkToolCompatibility } from "@/utils/lockTools";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ContactSectionProps {
   vehicle?: {
@@ -12,22 +13,32 @@ interface ContactSectionProps {
 
 export const ContactSection = ({ vehicle }: ContactSectionProps) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleContactSubmit = async (formData: ContactFormData) => {
     try {
+      setIsLoading(true);
+      
       // Get tool compatibility if vehicle info is available
       if (vehicle) {
         const toolCompatibility = checkToolCompatibility(vehicle.make, vehicle.year);
         console.log('Compatible Tools:', toolCompatibility.compatibleTools);
       }
       
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Send email using Edge Function
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (error) throw error;
+
       setIsSubmitted(true);
       toast.success("Thank you! We'll be in touch soon.");
     } catch (error) {
-      toast.error("Error submitting form");
-      console.error(error);
+      console.error('Error submitting form:', error);
+      toast.error("Error submitting form. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,7 +52,7 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
           <p className="text-center text-gray-600">
             Please provide your details below and we'll get back to you shortly
           </p>
-          <ContactForm onSubmit={handleContactSubmit} />
+          <ContactForm onSubmit={handleContactSubmit} isLoading={isLoading} />
         </>
       ) : (
         <div className="text-center p-8 bg-white rounded-lg shadow animate-fadeIn">
