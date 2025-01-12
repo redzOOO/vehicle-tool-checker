@@ -26,18 +26,22 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('RESEND_API_KEY is not configured');
     }
 
+    const emailData = {
+      from: "Auto Unlock Services <contact@northwalesautounlock.co.uk>",
+      to: ["lee.redhead@outlook.com"],
+      subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
+      html: emailHtml,
+    };
+
+    console.log('Sending email with data:', emailData);
+
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
-      body: JSON.stringify({
-        from: "Auto Unlock Services <contact@northwalesautounlock.co.uk>",
-        to: ["lee.redhead@outlook.com"],
-        subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
-        html: emailHtml,
-      }),
+      body: JSON.stringify(emailData),
     });
 
     if (!res.ok) {

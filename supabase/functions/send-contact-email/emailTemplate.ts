@@ -39,42 +39,51 @@ export const generateVehicleSection = (vehicle?: EmailData['vehicle']) => {
 
 export const generateEmailTemplate = (data: EmailData) => {
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
-      <div style="background-color: #f3f4f6; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
-        <h2 style="color: #1a1f2c; margin: 0 0 16px 0; font-size: 24px;">New Contact Form Submission</h2>
-        <p style="color: #4b5563; margin: 0;">A new contact form has been submitted with the following details:</p>
-      </div>
-      
-      <div style="margin-bottom: 24px;">
-        <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Contact Details</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Name:</strong></td>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;">${data.name}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Location:</strong></td>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;">${data.location}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Phone:</strong></td>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;">${data.phone}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Urgency:</strong></td>
-            <td style="padding: 8px; border: 1px solid #e5e7eb; ${data.urgency === 'urgent' ? 'color: #dc2626; font-weight: bold;' : ''}">${data.urgency.toUpperCase()}</td>
-          </tr>
-        </table>
-      </div>
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>New Contact Form Submission</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="background-color: #f3f4f6; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
+            <h2 style="color: #1a1f2c; margin: 0 0 16px 0; font-size: 24px;">New Contact Form Submission</h2>
+            <p style="color: #4b5563; margin: 0;">A new contact form has been submitted with the following details:</p>
+          </div>
+          
+          <div style="margin-bottom: 24px;">
+            <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Contact Details</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Name:</strong></td>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;">${data.name}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Location:</strong></td>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;">${data.location}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Phone:</strong></td>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;">${data.phone}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #e5e7eb;"><strong>Urgency:</strong></td>
+                <td style="padding: 8px; border: 1px solid #e5e7eb; ${data.urgency === 'urgent' ? 'color: #dc2626; font-weight: bold;' : ''}">${data.urgency.toUpperCase()}</td>
+              </tr>
+            </table>
+          </div>
 
-      ${data.notes ? `
-        <div style="margin-bottom: 24px;">
-          <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Additional Notes</h3>
-          <p style="background-color: #f9fafb; padding: 12px; border-radius: 4px; margin: 0;">${data.notes}</p>
+          ${data.notes ? `
+            <div style="margin-bottom: 24px;">
+              <h3 style="color: #1a1f2c; font-size: 18px; margin-bottom: 12px; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px;">Additional Notes</h3>
+              <p style="background-color: #f9fafb; padding: 12px; border-radius: 4px; margin: 0;">${data.notes}</p>
+            </div>
+          ` : ''}
+          
+          ${data.vehicle ? generateVehicleSection(data.vehicle) : ''}
         </div>
-      ` : ''}
-      
-      ${generateVehicleSection(data.vehicle)}
-    </div>
+      </body>
+    </html>
   `;
 };
