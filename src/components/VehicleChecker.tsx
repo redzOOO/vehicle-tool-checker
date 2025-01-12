@@ -20,7 +20,14 @@ export const VehicleChecker = ({ onCompatibleVehicle }: VehicleCheckerProps) => 
     setRegistration(registration);
     try {
       const result = await checkVehicleCompatibility(registration);
-      if (result) {
+      if (result.error) {
+        toast.error(result.error);
+        setVehicle(null);
+        setIsCompatible(false);
+        return;
+      }
+      
+      if (result.vehicle) {
         setVehicle(result.vehicle);
         setIsCompatible(result.isCompatible);
         onCompatibleVehicle(
