@@ -5,13 +5,12 @@ import { generateEmailTemplate } from "./emailTemplate.ts";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 const handler = async (req: Request): Promise<Response> => {
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
@@ -26,7 +25,6 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('RESEND_API_KEY is not configured');
     }
 
-    // Create plain text version of the email
     const plainText = `
       New contact form submission
       Name: ${formData.name}
@@ -48,10 +46,7 @@ const handler = async (req: Request): Promise<Response> => {
       to: ["lee.redhead@outlook.com"],
       subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
       html: emailHtml,
-      text: plainText,
-      headers: {
-        "Content-Type": "text/html; charset=utf-8"
-      }
+      text: plainText
     };
 
     console.log('Sending email with data:', emailData);

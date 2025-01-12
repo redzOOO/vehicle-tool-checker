@@ -38,7 +38,7 @@ export const generateVehicleSection = (vehicle?: EmailData['vehicle']) => {
 };
 
 export const generateEmailTemplate = (data: EmailData) => {
-  return `
+  const template = `
     <!DOCTYPE html>
     <html>
       <head>
@@ -88,5 +88,6 @@ export const generateEmailTemplate = (data: EmailData) => {
         </div>
       </body>
     </html>
-  `.trim();
+  `;
+  return template.trim();
 };
