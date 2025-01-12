@@ -30,7 +30,8 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
       
       const emailData = {
         name: formData.name,
-        location: formData.location,
+        addressLine1: formData.addressLine1,
+        postcode: formData.postcode,
         phone: formData.phone,
         notes: formData.notes,
         urgency: formData.urgency,
