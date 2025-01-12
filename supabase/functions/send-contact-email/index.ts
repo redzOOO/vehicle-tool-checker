@@ -26,12 +26,32 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('RESEND_API_KEY is not configured');
     }
 
+    // Create plain text version of the email
+    const plainText = `
+      New contact form submission
+      Name: ${formData.name}
+      Location: ${formData.location}
+      Phone: ${formData.phone}
+      Urgency: ${formData.urgency.toUpperCase()}
+      ${formData.notes ? `Notes: ${formData.notes}` : ''}
+      ${formData.vehicle ? `
+        Vehicle Details:
+        Make: ${formData.vehicle.make}
+        Year: ${formData.vehicle.year}
+        ${formData.vehicle.registration ? `Registration: ${formData.vehicle.registration}` : ''}
+        ${formData.vehicle.colour ? `Colour: ${formData.vehicle.colour}` : ''}
+      ` : ''}
+    `.trim();
+
     const emailData = {
       from: "Auto Unlock Services <contact@northwalesautounlock.co.uk>",
       to: ["lee.redhead@outlook.com"],
       subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
       html: emailHtml,
-      text: `New contact form submission from ${formData.name}. Location: ${formData.location}. Phone: ${formData.phone}. Urgency: ${formData.urgency.toUpperCase()}`,
+      text: plainText,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8"
+      }
     };
 
     console.log('Sending email with data:', emailData);

@@ -88,5 +88,5 @@ export const generateEmailTemplate = (data: EmailData) => {
         </div>
       </body>
     </html>
-  `;
+  `.trim();
 };
