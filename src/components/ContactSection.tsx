@@ -25,12 +25,23 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
         console.log('Compatible Tools:', toolCompatibility.compatibleTools);
       }
       
+      // Prepare form data without file objects
+      const emailData = {
+        name: formData.name,
+        location: formData.location,
+        notes: formData.notes,
+        urgency: formData.urgency,
+      };
+      
       // Send email using Edge Function
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
+        body: emailData
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
 
       setIsSubmitted(true);
       toast.success("Thank you! We'll be in touch soon.");

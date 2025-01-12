@@ -11,29 +11,29 @@ const corsHeaders = {
 interface ContactFormData {
   name: string;
   location: string;
-  phone: string;
   notes: string;
   urgency: string;
-  drivingLicence?: File;
-  v5Document?: File;
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const formData: ContactFormData = await req.json();
+    console.log('Received form data:', formData);
     
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
       <p><strong>Name:</strong> ${formData.name}</p>
       <p><strong>Location:</strong> ${formData.location}</p>
-      <p><strong>Phone:</strong> ${formData.phone}</p>
       <p><strong>Urgency:</strong> ${formData.urgency}</p>
       ${formData.notes ? `<p><strong>Additional Notes:</strong> ${formData.notes}</p>` : ''}
     `;
+
+    console.log('Sending email with HTML:', emailHtml);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -51,15 +51,19 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!res.ok) {
       const error = await res.text();
+      console.error('Resend API error:', error);
       throw new Error(error);
     }
 
     const data = await res.json();
+    console.log('Email sent successfully:', data);
+    
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
   } catch (error) {
+    console.error('Error in send-contact-email function:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
