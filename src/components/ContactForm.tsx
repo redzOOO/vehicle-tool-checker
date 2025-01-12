@@ -17,8 +17,6 @@ export interface ContactFormData {
   phone: string;
   notes: string;
   urgency: string;
-  drivingLicence?: File;
-  v5Document?: File;
 }
 
 export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
@@ -42,17 +40,6 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
       return;
     }
     onSubmit(formData);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'drivingLicence' | 'v5Document') => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        toast.error("File size must be less than 5MB");
-        return;
-      }
-      setFormData({ ...formData, [field]: file });
-    }
   };
 
   return (
@@ -114,34 +101,6 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="drivingLicence" className="block text-sm font-medium">
-          Driving Licence (Photo/Scan) *
-        </label>
-        <Input
-          id="drivingLicence"
-          type="file"
-          accept="image/*,.pdf"
-          onChange={(e) => handleFileChange(e, 'drivingLicence')}
-          required
-          className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label htmlFor="v5" className="block text-sm font-medium">
-          V5 Document (Photo/Scan) *
-        </label>
-        <Input
-          id="v5"
-          type="file"
-          accept="image/*,.pdf"
-          onChange={(e) => handleFileChange(e, 'v5Document')}
-          required
-          className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
-        />
-      </div>
-
-      <div className="space-y-2">
         <label htmlFor="notes" className="block text-sm font-medium">
           Additional Notes
         </label>
@@ -166,6 +125,17 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
         >
           I confirm I am human *
         </label>
+      </div>
+
+      <div className="mt-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-lg">
+        <h4 className="font-medium mb-2">Important Information:</h4>
+        <p>Before we can proceed with any vehicle services, we will require:</p>
+        <ul className="list-disc pl-5 space-y-1 mt-2">
+          <li>Valid proof of vehicle ownership (V5C document)</li>
+          <li>A valid driving licence matching the vehicle registration</li>
+          <li>Additional identity verification may be required</li>
+        </ul>
+        <p className="mt-2">These documents will be requested as part of our verification process after initial contact.</p>
       </div>
 
       <Button type="submit" className="w-full" disabled={isLoading || !isHuman}>
