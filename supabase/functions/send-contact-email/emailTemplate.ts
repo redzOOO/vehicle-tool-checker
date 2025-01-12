@@ -12,21 +12,14 @@ export const generateVehicleSection = (vehicle?: EmailData['vehicle']) => {
         Vehicle Information
       </h3>
       <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px;">
+        <div style="color: #64748b; font-weight: 500;">Registration:</div>
+        <div style="color: #1e293b; font-weight: 600;">${vehicle.registration || 'Not provided'}</div>
+        
         <div style="color: #64748b; font-weight: 500;">Make:</div>
         <div style="color: #1e293b;">${vehicle.make}</div>
         
         <div style="color: #64748b; font-weight: 500;">Year:</div>
         <div style="color: #1e293b;">${vehicle.year}</div>
-        
-        ${vehicle.registration ? `
-        <div style="color: #64748b; font-weight: 500;">Registration:</div>
-        <div style="color: #1e293b; font-weight: 600;">${vehicle.registration}</div>
-        ` : ''}
-        
-        ${vehicle.colour ? `
-        <div style="color: #64748b; font-weight: 500;">Colour:</div>
-        <div style="color: #1e293b;">${vehicle.colour}</div>
-        ` : ''}
       </div>
       
       <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">

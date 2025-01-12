@@ -4,10 +4,10 @@ import { ContactSection } from "@/components/ContactSection";
 
 const Index = () => {
   const [showContactForm, setShowContactForm] = useState(false);
-  const [currentVehicle, setCurrentVehicle] = useState<{ make: string; year: string } | undefined>();
+  const [currentVehicle, setCurrentVehicle] = useState<{ make: string; year: string; registration: string } | undefined>();
   const [isVehicleCompatible, setIsVehicleCompatible] = useState(false);
 
-  const handleCompatibleVehicle = (vehicle: { make: string; year: string }, isCompatible: boolean) => {
+  const handleCompatibleVehicle = (vehicle: { make: string; year: string; registration: string }, isCompatible: boolean) => {
     setCurrentVehicle(vehicle);
     setIsVehicleCompatible(isCompatible);
     setShowContactForm(true);

@@ -6,16 +6,18 @@ import { checkVehicleCompatibility } from "@/utils/vehicleUtils";
 import type { Vehicle } from "@/utils/vehicleUtils";
 
 interface VehicleCheckerProps {
-  onCompatibleVehicle: (vehicle: { make: string; year: string }, isCompatible: boolean) => void;
+  onCompatibleVehicle: (vehicle: { make: string; year: string; registration: string }, isCompatible: boolean) => void;
 }
 
 export const VehicleChecker = ({ onCompatibleVehicle }: VehicleCheckerProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [isCompatible, setIsCompatible] = useState(false);
+  const [registration, setRegistration] = useState<string>("");
 
   const handleRegistrationSubmit = async (registration: string) => {
     setIsLoading(true);
+    setRegistration(registration);
     try {
       const result = await checkVehicleCompatibility(registration);
       if (result) {
@@ -25,6 +27,7 @@ export const VehicleChecker = ({ onCompatibleVehicle }: VehicleCheckerProps) => 
           {
             make: result.vehicle.make,
             year: result.vehicle.year,
+            registration: registration,
           },
           result.isCompatible
         );
