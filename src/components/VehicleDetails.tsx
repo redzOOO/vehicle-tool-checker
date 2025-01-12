@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { checkToolCompatibility } from "@/utils/lockTools";
 
 interface Vehicle {
   make: string;
@@ -13,6 +14,8 @@ interface VehicleDetailsProps {
 }
 
 export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) => {
+  const toolCompatibility = checkToolCompatibility(vehicle.make, vehicle.year);
+
   return (
     <Card className="p-6 w-full max-w-md mx-auto animate-fadeIn">
       <div className="space-y-4">
@@ -20,12 +23,12 @@ export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) =
           <h3 className="text-lg font-semibold">Vehicle Details</h3>
           <span
             className={`px-3 py-1 rounded-full text-sm ${
-              isCompatible
+              toolCompatibility.isCompatible
                 ? "bg-green-100 text-green-800"
                 : "bg-red-100 text-red-800"
             }`}
           >
-            {isCompatible ? "Compatible" : "Not Compatible"}
+            {toolCompatibility.isCompatible ? "Compatible" : "Not Compatible"}
           </span>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -46,6 +49,18 @@ export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) =
             <p className="font-medium">{vehicle.year}</p>
           </div>
         </div>
+        {toolCompatibility.isCompatible && toolCompatibility.compatibleTools.length > 0 && (
+          <div className="mt-4">
+            <h4 className="text-sm font-medium text-gray-500 mb-2">Compatible Tools:</h4>
+            <ul className="space-y-1">
+              {toolCompatibility.compatibleTools.map((tool, index) => (
+                <li key={index} className="text-sm bg-gray-50 p-2 rounded">
+                  {tool}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </Card>
   );
