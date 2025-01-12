@@ -16,7 +16,8 @@ interface ContactFormProps {
 export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
-    location: "",
+    addressLine1: "",
+    postcode: "",
     phone: "",
     notes: "",
     urgency: "standard",
@@ -29,7 +30,7 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
       toast.error("Please verify that you are human");
       return;
     }
-    if (!formData.name || !formData.location || !formData.phone || !formData.urgency) {
+    if (!formData.name || !formData.addressLine1 || !formData.postcode || !formData.phone || !formData.urgency) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -51,13 +52,25 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="location" className="block text-sm font-medium">
-          Location (Address or Postcode) *
+        <label htmlFor="addressLine1" className="block text-sm font-medium">
+          First Line of Address *
         </label>
         <Input
-          id="location"
-          value={formData.location}
-          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+          id="addressLine1"
+          value={formData.addressLine1}
+          onChange={(e) => setFormData({ ...formData, addressLine1: e.target.value })}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="postcode" className="block text-sm font-medium">
+          Postcode *
+        </label>
+        <Input
+          id="postcode"
+          value={formData.postcode}
+          onChange={(e) => setFormData({ ...formData, postcode: e.target.value })}
           required
         />
       </div>

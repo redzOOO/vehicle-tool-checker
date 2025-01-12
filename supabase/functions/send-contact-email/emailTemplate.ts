@@ -60,8 +60,11 @@ export const generateEmailTemplate = (data: EmailData): string => {
               <div style="color: #64748b; font-weight: 500;">Name:</div>
               <div style="color: #1e293b;">${data.name}</div>
               
-              <div style="color: #64748b; font-weight: 500;">Location:</div>
-              <div style="color: #1e293b;">${data.location}</div>
+              <div style="color: #64748b; font-weight: 500;">Address:</div>
+              <div style="color: #1e293b;">${data.addressLine1}</div>
+              
+              <div style="color: #64748b; font-weight: 500;">Postcode:</div>
+              <div style="color: #1e293b;">${data.postcode}</div>
               
               <div style="color: #64748b; font-weight: 500;">Phone:</div>
               <div style="color: #1e293b;">${data.phone}</div>

@@ -7,7 +7,8 @@ export interface Vehicle {
 
 export interface EmailData {
   name: string;
-  location: string;
+  addressLine1: string;
+  postcode: string;
   phone: string;
   notes: string;
   urgency: string;
