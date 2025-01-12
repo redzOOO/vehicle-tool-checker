@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface ContactFormProps {
   onSubmit: (formData: ContactFormData) => void;
@@ -28,9 +29,14 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
     notes: "",
     urgency: "standard",
   });
+  const [isHuman, setIsHuman] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isHuman) {
+      toast.error("Please verify that you are human");
+      return;
+    }
     if (!formData.name || !formData.location || !formData.phone || !formData.urgency) {
       toast.error("Please fill in all required fields");
       return;
@@ -147,7 +153,22 @@ export const ContactForm = ({ onSubmit, isLoading }: ContactFormProps) => {
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="human"
+          checked={isHuman}
+          onCheckedChange={(checked) => setIsHuman(checked as boolean)}
+          className="data-[state=checked]:bg-primary"
+        />
+        <label
+          htmlFor="human"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          I confirm I am human *
+        </label>
+      </div>
+
+      <Button type="submit" className="w-full" disabled={isLoading || !isHuman}>
         {isLoading ? "Submitting..." : "Submit"}
       </Button>
     </form>
