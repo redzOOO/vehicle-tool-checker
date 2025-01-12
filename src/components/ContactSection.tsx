@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { ContactForm } from "@/components/ContactForm";
 import { ContactFormData } from "@/types/contact";
 import { toast } from "sonner";
 import { checkToolCompatibility } from "@/utils/lockTools";
 import { supabase } from "@/integrations/supabase/client";
+import { ContactMessage } from "./contact/ContactMessage";
+import { SuccessMessage } from "./contact/SuccessMessage";
 
 interface ContactSectionProps {
   vehicle?: {
@@ -22,25 +23,22 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
     try {
       setIsLoading(true);
       
-      // Get tool compatibility if vehicle info is available
       if (vehicle) {
         const toolCompatibility = checkToolCompatibility(vehicle.make, vehicle.year);
         console.log('Compatible Tools:', toolCompatibility.compatibleTools);
       }
       
-      // Prepare form data
       const emailData = {
         name: formData.name,
         location: formData.location,
         phone: formData.phone,
         notes: formData.notes,
         urgency: formData.urgency,
-        vehicle: vehicle // Include vehicle information if available
+        vehicle
       };
       
       console.log('Sending email data:', emailData);
       
-      // Send email using Edge Function
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: emailData
       });
@@ -66,42 +64,9 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
         We can offer assistance!
       </h2>
       {!isSubmitted ? (
-        <>
-          <p className="text-center text-gray-600">
-            Please provide your details below and we'll get back to you shortly
-          </p>
-          <ContactForm onSubmit={handleContactSubmit} isLoading={isLoading} />
-        </>
+        <ContactMessage onSubmit={handleContactSubmit} isLoading={isLoading} />
       ) : (
-        <div className="text-center p-8 bg-primary/5 border-2 border-primary rounded-lg shadow-lg animate-fadeIn">
-          <div className="max-w-md mx-auto space-y-4">
-            <div className="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <h3 className="text-2xl font-bold text-primary">
-              Thank You for Contacting Us!
-            </h3>
-            <p className="text-lg text-gray-700">
-              We have received your details and will be in touch with you shortly.
-            </p>
-            <p className="text-sm text-gray-600">
-              Our team typically responds within 1-2 hours during business hours.
-            </p>
-          </div>
-        </div>
+        <SuccessMessage />
       )}
     </div>
   );
