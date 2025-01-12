@@ -53,7 +53,7 @@ serve(async (req) => {
       isCompatible: true, // You might want to add logic to determine compatibility
       vehicle: {
         make: dvlaData.make,
-        model: dvlaData.model,
+        colour: dvlaData.colour,
         year: dvlaData.yearOfManufacture,
         registration: dvlaData.registrationNumber
       }

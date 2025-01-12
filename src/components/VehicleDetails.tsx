@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 
 interface Vehicle {
   make: string;
-  model: string;
+  colour: string;
   year: string;
   registration: string;
 }
@@ -38,8 +38,8 @@ export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) =
             <p className="font-medium">{vehicle.make}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">Model</p>
-            <p className="font-medium">{vehicle.model}</p>
+            <p className="text-sm text-gray-500">Colour</p>
+            <p className="font-medium">{vehicle.colour}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500">Year</p>
