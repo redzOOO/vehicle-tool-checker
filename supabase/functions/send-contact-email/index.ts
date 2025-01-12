@@ -18,8 +18,12 @@ const handler = async (req: Request): Promise<Response> => {
     const formData: EmailData = await req.json();
     console.log('Received form data:', formData);
 
+    if (!RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+
     const htmlContent = generateEmailTemplate(formData);
-    console.log('Generated HTML template:', htmlContent);
+    console.log('Sending email with HTML:', htmlContent);
 
     const emailData = {
       from: "North Wales Auto Unlock <contact@northwalesautounlock.co.uk>",
@@ -27,8 +31,6 @@ const handler = async (req: Request): Promise<Response> => {
       subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
       html: htmlContent,
     };
-
-    console.log('Sending email with data:', emailData);
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
