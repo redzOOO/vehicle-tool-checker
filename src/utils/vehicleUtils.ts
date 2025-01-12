@@ -1,5 +1,3 @@
-import { supabase } from "@/integrations/supabase/client";
-
 export interface Vehicle {
   make: string;
   model: string;
@@ -12,26 +10,26 @@ export interface VehicleCheckResult {
   vehicle: Vehicle;
 }
 
+const getMockVehicleResponse = (registration: string): VehicleCheckResult => ({
+  isCompatible: true,
+  vehicle: {
+    make: "Toyota",
+    model: "Corolla",
+    year: "2020",
+    registration: registration,
+  }
+});
+
 export const checkVehicleCompatibility = async (registration: string): Promise<VehicleCheckResult> => {
   try {
-    const { data, error } = await supabase
-      .from('secrets')
-      .select('value')
-      .eq('name', 'DVLA_API_KEY')
-      .maybeSingle();
+    const apiKey = import.meta.env.VITE_DVLA_API_KEY;
     
-    if (error) {
-      console.error('Error fetching DVLA API key:', error);
-      throw new Error("Failed to access DVLA API key");
-    }
-
-    if (!data) {
-      console.log('No DVLA API key found');
+    if (!apiKey) {
+      console.error('No DVLA API key found in environment variables');
       return getMockVehicleResponse(registration);
     }
 
-    const apiKey = data.value;
-    console.log('Successfully retrieved DVLA API key');
+    console.log('Successfully retrieved DVLA API key from environment variables');
     
     try {
       const response = await fetch(`${window.location.origin}/api/vehicle-check`, {
@@ -67,13 +65,3 @@ export const checkVehicleCompatibility = async (registration: string): Promise<V
     throw error;
   }
 };
-
-const getMockVehicleResponse = (registration: string): VehicleCheckResult => ({
-  isCompatible: true,
-  vehicle: {
-    make: "Toyota",
-    model: "Corolla",
-    year: "2020",
-    registration: registration,
-  }
-});
