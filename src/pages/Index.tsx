@@ -41,7 +41,7 @@ const Index = () => {
               <p className="text-sm">
                 24/7 Emergency Service<br />
                 Phone: 0800 123 4567<br />
-                Email: info@nwautounlock.co.uk
+                Enter your registration above to check compatibility
               </p>
             </div>
             <div>
