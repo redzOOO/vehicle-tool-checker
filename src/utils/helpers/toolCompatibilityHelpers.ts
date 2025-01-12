@@ -17,8 +17,14 @@ export const isYearInRange = (vehicleYear: number, startYear: number, endYear: n
 };
 
 export const findMatchingMake = (make: string, makes: string[]): string | undefined => {
+  // First try exact match
+  const exactMatch = makes.find(key => key.toLowerCase() === make.toLowerCase());
+  if (exactMatch) return exactMatch;
+
+  // Then try generic match (e.g., "Toyota" for "Toyota Corolla")
   return makes.find(key => {
-    const makePattern = new RegExp(key.replace(/\s+/g, '.*'), 'i');
-    return makePattern.test(make);
+    const makeWords = make.toLowerCase().split(' ');
+    const keyWords = key.toLowerCase().split(' ');
+    return makeWords.some(word => keyWords.includes(word));
   });
 };

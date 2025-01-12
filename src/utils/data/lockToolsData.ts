@@ -1,9 +1,10 @@
 import { LockToolData } from '../types/lockToolTypes';
 
 export const lockTools: LockToolData = {
-  "Toyota Camry": ["TOY43AT"],
-  "Toyota Reiz": ["TOY43AT"],
-  "Toyota Corolla": ["TOY43AT"],
+  "Toyota": ["TOY43AT (1980–present)"],
+  "Toyota Camry": ["TOY43AT (1980–present)"],
+  "Toyota Reiz": ["TOY43AT (1980–present)"],
+  "Toyota Corolla": ["TOY43AT (1980–present)"],
   "Toyota Crown": ["TOY43AT (1980–2000)", "TOY48 (2000–present)"],
   "Suzuki": ["HU87 (1990–present)"],
   "Hyundai": ["HYN11 (1995–2010)", "HYN7R (2010–present)", "HY15 (2000–present)", "HY16 (2005–present)", "HY22 (2015–present)"],

@@ -28,7 +28,7 @@ export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) =
                 : "bg-red-100 text-red-800"
             }`}
           >
-            {toolCompatibility.isCompatible ? "Compatible" : "Not Compatible"}
+            {toolCompatibility.isCompatible ? "Serviceable" : "Not Serviceable"}
           </span>
         </div>
         <div className="grid grid-cols-2 gap-4">
