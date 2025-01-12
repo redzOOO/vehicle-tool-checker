@@ -31,6 +31,7 @@ const handler = async (req: Request): Promise<Response> => {
       to: ["lee.redhead@outlook.com"],
       subject: `New Contact Form Submission - ${formData.urgency.toUpperCase()} Request`,
       html: emailHtml,
+      text: `New contact form submission from ${formData.name}. Location: ${formData.location}. Phone: ${formData.phone}. Urgency: ${formData.urgency.toUpperCase()}`,
     };
 
     console.log('Sending email with data:', emailData);
