@@ -1,5 +1,5 @@
 import { EmailData } from "./types.ts";
-import { checkToolCompatibility } from "../../../src/utils/lockTools.ts";
+import { checkToolCompatibility } from "./utils/lockTools.ts";
 
 export const generateVehicleSection = (vehicle?: EmailData['vehicle']) => {
   if (!vehicle) return '';
