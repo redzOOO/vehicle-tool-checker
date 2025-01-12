@@ -4,6 +4,12 @@ import { ContactSection } from "@/components/ContactSection";
 
 const Index = () => {
   const [showContactForm, setShowContactForm] = useState(false);
+  const [currentVehicle, setCurrentVehicle] = useState<{ make: string; year: string } | undefined>();
+
+  const handleCompatibleVehicle = (vehicle: { make: string; year: string }) => {
+    setCurrentVehicle(vehicle);
+    setShowContactForm(true);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -19,8 +25,8 @@ const Index = () => {
           </div>
 
           <div className="space-y-8">
-            <VehicleChecker onCompatibleVehicle={() => setShowContactForm(true)} />
-            {showContactForm && <ContactSection />}
+            <VehicleChecker onCompatibleVehicle={handleCompatibleVehicle} />
+            {showContactForm && <ContactSection vehicle={currentVehicle} />}
           </div>
         </div>
       </main>

@@ -49,18 +49,6 @@ export const VehicleDetails = ({ vehicle, isCompatible }: VehicleDetailsProps) =
             <p className="font-medium">{vehicle.year}</p>
           </div>
         </div>
-        {toolCompatibility.isCompatible && toolCompatibility.compatibleTools.length > 0 && (
-          <div className="mt-4">
-            <h4 className="text-sm font-medium text-gray-500 mb-2">Compatible Tools:</h4>
-            <ul className="space-y-1">
-              {toolCompatibility.compatibleTools.map((tool, index) => (
-                <li key={index} className="text-sm bg-gray-50 p-2 rounded">
-                  {tool}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </Card>
   );

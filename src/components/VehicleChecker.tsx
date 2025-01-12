@@ -6,7 +6,7 @@ import { checkVehicleCompatibility } from "@/utils/vehicleUtils";
 import type { Vehicle } from "@/utils/vehicleUtils";
 
 interface VehicleCheckerProps {
-  onCompatibleVehicle: () => void;
+  onCompatibleVehicle: (vehicle: { make: string; year: string }) => void;
 }
 
 export const VehicleChecker = ({ onCompatibleVehicle }: VehicleCheckerProps) => {
@@ -22,7 +22,10 @@ export const VehicleChecker = ({ onCompatibleVehicle }: VehicleCheckerProps) => 
         setVehicle(result.vehicle);
         setIsCompatible(result.isCompatible);
         if (result.isCompatible) {
-          onCompatibleVehicle();
+          onCompatibleVehicle({
+            make: result.vehicle.make,
+            year: result.vehicle.year,
+          });
         } else {
           toast.error("Sorry, this vehicle is not compatible with our tools");
         }

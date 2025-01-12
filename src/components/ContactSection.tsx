@@ -1,9 +1,23 @@
 import { ContactForm, ContactFormData } from "@/components/ContactForm";
 import { toast } from "sonner";
+import { checkToolCompatibility } from "@/utils/lockTools";
 
-export const ContactSection = () => {
+interface ContactSectionProps {
+  vehicle?: {
+    make: string;
+    year: string;
+  };
+}
+
+export const ContactSection = ({ vehicle }: ContactSectionProps) => {
   const handleContactSubmit = async (formData: ContactFormData) => {
     try {
+      // Get tool compatibility if vehicle info is available
+      if (vehicle) {
+        const toolCompatibility = checkToolCompatibility(vehicle.make, vehicle.year);
+        console.log('Compatible Tools:', toolCompatibility.compatibleTools);
+      }
+      
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       toast.success("Thank you! We'll be in touch soon.");
