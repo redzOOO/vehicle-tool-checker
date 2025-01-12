@@ -76,13 +76,15 @@ export const lockTools: LockToolData = {
 export const checkToolCompatibility = (make: string, year: string): { isCompatible: boolean; compatibleTools: string[] } => {
   // Convert year to number for comparison
   const vehicleYear = parseInt(year);
+  if (isNaN(vehicleYear)) {
+    return { isCompatible: false, compatibleTools: [] };
+  }
   
   // Find exact match or partial match for make
-  const matchingMake = Object.keys(lockTools).find(key => 
-    key.toLowerCase() === make.toLowerCase() || 
-    make.toLowerCase().includes(key.toLowerCase()) ||
-    key.toLowerCase().includes(make.toLowerCase())
-  );
+  const matchingMake = Object.keys(lockTools).find(key => {
+    const makePattern = new RegExp(key.replace(/\s+/g, '.*'), 'i');
+    return makePattern.test(make);
+  });
 
   if (!matchingMake) {
     return { isCompatible: false, compatibleTools: [] };
@@ -90,17 +92,27 @@ export const checkToolCompatibility = (make: string, year: string): { isCompatib
 
   const tools = lockTools[matchingMake];
   const compatibleTools = tools.filter(tool => {
+    // Extract year range from tool string
     const yearRange = tool.match(/\((\d{4})–(present|\d{4})\)/);
     if (!yearRange) return true; // If no year range specified, consider compatible
     
     const startYear = parseInt(yearRange[1]);
-    const endYear = yearRange[2] === 'present' ? new Date().getFullYear() : parseInt(yearRange[2]);
+    const endYear = yearRange[2] === 'present' 
+      ? new Date().getFullYear() 
+      : parseInt(yearRange[2]);
     
+    // Check if vehicle year falls within the tool's year range
     return vehicleYear >= startYear && vehicleYear <= endYear;
+  });
+
+  // Extract just the tool names without the year ranges for display
+  const formattedTools = compatibleTools.map(tool => {
+    const toolName = tool.split(' (')[0];
+    return toolName;
   });
 
   return {
     isCompatible: compatibleTools.length > 0,
-    compatibleTools
+    compatibleTools: formattedTools
   };
 };
