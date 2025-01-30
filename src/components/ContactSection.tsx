@@ -25,7 +25,7 @@ export const ContactSection = ({ vehicle }: ContactSectionProps) => {
       
       if (vehicle) {
         const toolCompatibility = checkToolCompatibility(vehicle.make, vehicle.year);
-        console.log('Compatible Tools:', toolCompatibility.compatibleTools);
+        console.log('Vehicle Serviceability:', toolCompatibility);
       }
       
       const emailData = {

@@ -34,7 +34,7 @@ export const checkVehicleCompatibility = async (registration: string): Promise<V
       const compatibility = checkToolCompatibility(data.vehicle.make, data.vehicle.year);
       return {
         ...data,
-        isCompatible: compatibility.isCompatible
+        isCompatible: compatibility.canService
       };
     }
 
