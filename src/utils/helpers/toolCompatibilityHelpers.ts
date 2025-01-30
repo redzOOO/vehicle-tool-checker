@@ -25,8 +25,13 @@ export const findMatchingMake = (make: string, makes: string[]): string | undefi
   const makeWords = make.toLowerCase().split(' ');
   return makes.find(key => {
     const keyWords = key.toLowerCase().split(' ');
-    // Check if any word in the make matches any word in the key
     return makeWords.some(word => keyWords.includes(word)) ||
            keyWords.some(word => makeWords.includes(word));
   });
+};
+
+// New helper to check if a vehicle can be recoded based on year
+export const canVehicleBeRecoded = (year: string): boolean => {
+  const vehicleYear = parseInt(year);
+  return !isNaN(vehicleYear) && vehicleYear >= 2000; // Assuming vehicles from 2000 onwards can be recoded
 };

@@ -5,4 +5,10 @@ export interface LockToolData {
 export interface ToolCompatibilityResult {
   isCompatible: boolean;
   compatibleTools: string[];
+  canRecode: boolean;
+}
+
+export interface VehicleServiceability {
+  canService: boolean;
+  canRecode: boolean;
 }
